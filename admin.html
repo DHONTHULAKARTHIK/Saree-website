@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard – Lakshmanna</title>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body>
+
+  <!-- bg image -->
+  <div class="bg-image"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo"/></a>
+      <span class="admin-badge">Admin Portal</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="logoutAdmin()">Log Out</a></li>
+    </ul>
+  </nav>
+
+  <!-- LOGIN SECTION -->
+  <section class="admin-login-section" id="admin-login-section">
+    <div class="login-card">
+      <div class="login-icon">🛡️</div>
+      <h2 style="color: #f5d08a; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;">Admin Gateway</h2>
+      <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 20px;">Access restricted to authorized personnel.</p>
+      
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <input type="email" id="admin-email" placeholder="Admin Email" value="kotha.madesh@gmail.com" required readonly />
+        </div>
+        <div class="form-group">
+          <input type="password" id="admin-pass" placeholder="Admin Password" required />
+        </div>
+        <div id="login-msg" class="login-msg" style="display:none;"></div>
+        <button type="submit" class="login-btn w-full">Authenticate</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- DASHBOARD SECTION -->
+  <section class="admin-dashboard-section" id="admin-dashboard-section" style="display:none;">
+    <div class="dashboard-header">
+      <h1 class="dash-title">Global Order Matrix</h1>
+      <p class="dash-subtitle">Review, Accept, or Reject customer orders universally.</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="dash-filters">
+      <button class="filter-btn active" onclick="filterOrders('all', event)">All Orders</button>
+      <button class="filter-btn" onclick="filterOrders('Awaiting Confirmation', event)">Pending</button>
+      <button class="filter-btn" onclick="filterOrders('Accepted', event)">Accepted</button>
+      <button class="filter-btn" onclick="filterOrders('Rejected', event)">Rejected</button>
+    </div>
+    
+    <div id="loading-orders" style="color: #f5d08a; padding: 20px;">Fetching global transactions...</div>
+
+    <div class="orders-grid" id="admin-orders-grid">
+      <!-- Generated orders -->
+    </div>
+
+  </section>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Lakshmanna Pure Silk Sarees</title>
+  <link rel="stylesheet" href="login.css"/>
+</head>
+<body>
+
+  <div class="bg-image"></div>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <img src="logo.jpg" alt="Logo" class="auth-logo"/>
+      <h1 class="auth-title">Welcome</h1>
+    </div>
+
+    <div class="auth-toggle">
+      <button class="toggle-btn active" onclick="switchTab('login')">Login</button>
+      <button class="toggle-btn" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="form-login" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+      <div class="input-group">
+        <label for="login-email">Email Address</label>
+        <input type="email" id="login-email" placeholder="Enter your email" required/>
+      </div>
+      <div class="input-group">
+        <label for="login-pass">Password</label>
+        <input type="password" id="login-pass" placeholder="Enter your password" required/>
+      </div>
+      <button type="submit" class="submit-btn">Login to Account</button>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form id="form-signup" class="auth-form" onsubmit="handleAuth(event, 'signup')">
+      <div class="input-group">
+        <label for="signup-name">Full Name</label>
+        <input type="text" id="signup-name" placeholder="Enter your name" required/>
+      </div>
+      <div class="input-group">
+        <label for="signup-email">Email Address</label>
+        <input type="email" id="signup-email" placeholder="Enter your email" required/>
+      </div>
+      <div class="input-group">
+        <label for="signup-pass">Password</label>
+        <input type="password" id="signup-pass" placeholder="Create a password" required/>
+      </div>
+      <button type="submit" class="submit-btn">Create Account</button>
+    </form>
+
+    <div class="skip-link">
+      <a href="home.html">← Skip & Continue as Guest</a>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+
+</body>
+</html>

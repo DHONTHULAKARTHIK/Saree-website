@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard – Lakshmanna Pure Silk Sarees</title>
+  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+  <div class="bg-image"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo" /></a>
+      <a href="profile.html" class="profile-nav-link active-profile" style="text-decoration: none; color: #1a0a00; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: linear-gradient(135deg, #f5d08a, #c9973a); border: 1px solid transparent; backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 18px rgba(197, 151, 58, 0.5); transform: translateY(-2px);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Profile</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">Cart <span class="cart-badge" id="cart-badge">0</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- DASHBOARD SECTION -->
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <div class="profile-avatar-small"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+        <div class="sidebar-user-info">
+          <h3 id="sidebar-name">Loading...</h3>
+          <p id="sidebar-email">Loading...</p>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <button class="tab-btn active" onclick="switchTab('details', event)">📋 My Details</button>
+        <button class="tab-btn" onclick="switchTab('password', event)">🔐 Change Password</button>
+        <button class="tab-btn" onclick="switchTab('orders', event)">🛍️ My Orders</button>
+        <button class="tab-btn" onclick="switchTab('addresses', event)">📍 Saved Addresses</button>
+        <button class="tab-btn logout-item" onclick="logoutUser()">🚪 Log Out</button>
+      </div>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="dashboard-content">
+      
+      <!-- TAB: Details -->
+      <section id="tab-details" class="tab-panel active">
+        <h2 class="panel-title">My Details</h2>
+        <div class="panel-divider"></div>
+        <div class="details-card">
+          <div class="detail-row">
+            <span class="detail-label">Full Name</span>
+            <span class="detail-value" id="display-name">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Email Address</span>
+            <span class="detail-value" id="display-email">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Account Status</span>
+            <span class="detail-value status-active">Active</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Password -->
+      <section id="tab-password" class="tab-panel">
+        <h2 class="panel-title">Change Password</h2>
+        <div class="panel-divider"></div>
+        <form class="password-form" onsubmit="handlePasswordChange(event)">
+          <div class="form-group">
+            <label for="old-pass">Current Password</label>
+            <input type="password" id="old-pass" required placeholder="Enter current password"/>
+          </div>
+          <div class="form-group">
+            <label for="new-pass">New Password</label>
+            <input type="password" id="new-pass" required placeholder="Enter new password (min. 6 chars)" minlength="6"/>
+          </div>
+          <div class="form-group">
+            <label for="confirm-pass">Confirm New Password</label>
+            <input type="password" id="confirm-pass" required placeholder="Confirm your new password" minlength="6"/>
+          </div>
+          <div id="pass-msg" class="form-msg"></div>
+          <button type="submit" class="action-btn" id="pass-submit-btn">Update Password</button>
+        </form>
+      </section>
+
+      <!-- TAB: Orders -->
+      <section id="tab-orders" class="tab-panel">
+        <h2 class="panel-title">My Orders</h2>
+        <div class="panel-divider"></div>
+        <div id="orders-list"></div>
+        <div class="orders-empty" id="orders-empty">
+          <div class="empty-icon">🛍️</div>
+          <h3>No Orders Yet</h3>
+          <p>You haven't placed any orders with us. Start exploring our collection!</p>
+          <a href="products.html" class="action-btn" style="text-decoration:none; display:inline-block; margin-top:15px;">Shop Now</a>
+        </div>
+      </section>
+
+      <!-- TAB: Addresses -->
+      <section id="tab-addresses" class="tab-panel">
+        <h2 class="panel-title">Saved Addresses</h2>
+        <div class="panel-divider"></div>
+        <div id="address-list" class="address-grid">
+          <!-- Populated by JS -->
+        </div>
+        <div class="add-address-card" onclick="openAddressForm()">
+          <span class="add-icon">+</span>
+          <p>Add New Address</p>
+        </div>
+        
+        <!-- Address Form (Hidden) -->
+        <form id="address-form" class="address-form hidden" onsubmit="saveAddress(event)">
+          <h3>Add Shipping Address</h3>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="addr-name" required placeholder="John Doe"/>
+          </div>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" id="addr-street" required placeholder="#123 Silk Road"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="addr-city" required placeholder="Dharmavaram"/>
+            </div>
+            <div class="form-group">
+              <label>PIN Code</label>
+              <input type="text" id="addr-pin" required placeholder="515671"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="addr-state" required placeholder="Andhra Pradesh"/>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" onclick="closeAddressForm()">Cancel</button>
+            <button type="submit" class="action-btn">Save Address</button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>© 2026 K. Lakshmanna Pure Silk Sarees. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

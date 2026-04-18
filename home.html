@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lakshmanna Pure Silk Sarees - Home</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+
+<body>
+  <div class="bg-image"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo" /></a>
+      <a href="profile.html" class="profile-nav-link" style="text-decoration: none; color: #f0d9a0; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: rgba(10, 5, 0, 0.3); border: 1px solid rgba(197, 151, 58, 0.3); backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Profile</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html" class="active">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">Cart <span class="cart-badge" id="cart-badge">0</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section">
+    <h2 class="why-title">Why Choose Us</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🧵</div>
+        <h3>100% Pure Silk</h3>
+        <p>Every saree is crafted from authentic pure silk, ensuring unmatched quality and a luxurious feel.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤲</div>
+        <h3>Handcrafted</h3>
+        <p>Our master weavers pour their skill and tradition into every thread, creating wearable art.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🚚</div>
+        <h3>Free Shipping</h3>
+        <p>Enjoy free delivery across India on all orders. Your dream saree delivered right to your door.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">↩</div>
+        <h3>Easy Returns</h3>
+        <p>Not satisfied? Return within 7 days for a full refund — no questions asked.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS SECTION -->
+  <section class="products-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Our Collection</h2>
+        <p class="section-subtitle">Handpicked pure silk sarees crafted for timeless elegance</p>
+      </div>
+      <a href="products.html" class="view-all-btn">View All →</a>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="sarees/p1.jpg" alt="Kanchipuram Silk Saree" />
+          <div class="product-badge">Bestseller</div>
+        </div>
+        <div class="product-info">
+          <h3>Green Kanchipuram Silk</h3>
+          <p>Exquisite handwoven Kanchipuram saree with contrast border and rich zari work, perfect for weddings.</p>
+          <div class="product-footer">
+            <span class="price">₹8,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p1" data-name="Green Kanchipuram Silk" data-price="8499" data-img="sarees/p1.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="sarees/p2.jpg" alt="Suvarna Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Dark Green Suvarna Silk</h3>
+          <p>Luxurious Suvarna silk saree in deep green with golden border, ideal for festive and formal occasions.</p>
+          <div class="product-footer">
+            <span class="price">₹6,299</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p2" data-name="Dark Green Suvarna Silk" data-price="6299" data-img="sarees/p2.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="sarees/p3.jpg" alt="Pure Silk Saree" />
+          <div class="product-badge">Premium</div>
+        </div>
+        <div class="product-info">
+          <h3>Classic Pure Silk Saree</h3>
+          <p>A timeless classic pure silk saree with intricate motifs and a graceful drape, loved across generations.
+          </p>
+          <div class="product-footer">
+            <span class="price">₹7,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p3" data-name="Classic Pure Silk Saree" data-price="7999" data-img="sarees/p3.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="sarees/p4.webp" alt="Paithani Silk Saree" />
+          <div class="product-badge">Exclusive</div>
+        </div>
+        <div class="product-info">
+          <h3>Paithani Silk Saree</h3>
+          <p>Traditional Paithani silk saree with delicate zari border and peacock motifs, a Maharashtra treasure.</p>
+          <div class="product-footer">
+            <span class="price">₹11,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p4" data-name="Paithani Silk Saree" data-price="11499" data-img="sarees/p4.webp">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <h2 class="why-title">What Our Customers Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-text">"I bought the Kanchipuram saree for my wedding and it was absolutely stunning. The
+          quality is beyond words!"</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">👩</span>
+          <div>
+            <strong>Priya Sharma</strong>
+            <span>Chennai</span>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"The Paithani silk saree I ordered arrived perfectly packed. Colours are vivid and
+          the zari work is exquisite!"</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">👩</span>
+          <div>
+            <strong>Anitha Reddy</strong>
+            <span>Hyderabad</span>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"Lakshmanna Pure Silk Sarees is my go-to for every occasion. Authentic, beautiful,
+          and great service!"</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">👩</span>
+          <div>
+            <strong>Meena Iyer</strong>
+            <span>Bangalore</span>
+          </div>
+        </div>
+        <div class="stars">★★★★★</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <a href="cart.html" class="float-cart" id="float-cart">
+    <span class="float-cart-icon">🛒</span>
+    <span>View Cart</span>
+    <span class="float-cart-count" id="float-cart-count">0</span>
+  </a>
+  <footer class="footer">
+    <div class="footer-top">
+
+      <!-- Brand -->
+      <div class="footer-brand">
+        <img src="logo.jpg" alt="Logo" class="footer-logo"/>
+        <p>K. Lakshmanna</p>
+        <span>Mfrs. Hand-Loom Pure Silk Lace Sarees</span>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="about.html">About Us</a>
+      </div>
+
+      <!-- Address -->
+      <div class="footer-contact">
+        <h4>Address</h4>
+        <p>📍 #11/823, Sri Lakshmi Complex,<br/>Thogata Street,<br/>Dharmavaram – 515671</p>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>📞 <a href="tel:9704047329" style="color:inherit;text-decoration:none;">9704047329</a></p>
+        <p>✉️ <a href="mailto:kotha.madesh@gmail.com" style="color:inherit;text-decoration:none;">kotha.madesh@gmail.com</a></p>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 K. Lakshmanna Pure Silk Sarees. All rights reserved.</p>
+    </div>
+  </footer>
+
+<script src="cart.js"></script>
+<script src="shop.js"></script>
+
+</body>
+
+</html>

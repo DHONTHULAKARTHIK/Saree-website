@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products – Lakshmanna Pure Silk Sarees</title>
+  <link rel="stylesheet" href="products.css" />
+</head>
+
+<body>
+
+  <div class="bg-image"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo" /></a>
+      <a href="profile.html" class="profile-nav-link"
+        style="text-decoration: none; color: #f0d9a0; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: rgba(10, 5, 0, 0.3); border: 1px solid rgba(197, 151, 58, 0.3); backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;"><svg
+          width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg> Profile</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="products.html" class="active">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">Cart <span class="cart-badge" id="cart-badge">0</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- PRODUCTS PAGE -->
+  <section class="products-section">
+
+    <div class="page-header">
+      <div class="title-container">
+        <h1 class="page-title">All Collections</h1>
+        <p class="page-subtitle">Explore our complete collection of handcrafted pure silk sarees</p>
+        <div id="products-count" class="products-count"></div>
+      </div>
+
+      <!-- ── TOP-RIGHT TOOLBAR ── -->
+      <div class="top-toolbar">
+        <div class="dropdowns-row">
+          <div class="toolbar-item">
+            <label for="filter-select" class="filter-label">Filter</label>
+            <select id="filter-select" class="sort-select" onchange="applyFilter(this.value)">
+              <option value="all">All Sarees</option>
+              <option value="Bestseller">Bestsellers</option>
+              <option value="New">New Arrivals</option>
+              <option value="Premium">Premium</option>
+              <option value="Exclusive">Exclusive</option>
+              <option value="Sale">On Sale</option>
+            </select>
+          </div>
+          <div class="toolbar-item">
+            <label for="sort-select" class="filter-label">Sort by</label>
+            <select id="sort-select" class="sort-select" onchange="applySort(this.value)">
+              <option value="default">Default</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="name-asc">Name: A → Z</option>
+              <option value="name-desc">Name: Z → A</option>
+            </select>
+          </div>
+        </div>
+        <div class="search-row">
+          <input type="text" id="search-input" class="search-input" placeholder="Search sarees..."
+            onkeyup="applySearch(this.value)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+
+      <div class="product-card" data-type="Kanchipuram" data-badge="Bestseller" data-price="8499"
+        data-name="Green Kanchipuram Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p1.jpg" alt="Kanchipuram Silk Saree" />
+          <div class="product-badge">Bestseller</div>
+        </div>
+        <div class="product-info">
+          <h3>Green Kanchipuram Silk</h3>
+          <p>Exquisite handwoven saree with contrast border and rich zari work.</p>
+          <div class="product-footer">
+            <span class="price">₹8,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p1" data-name="Green Kanchipuram Silk"
+              data-price="8499" data-img="p1.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Suvarna" data-badge="New" data-price="6299"
+        data-name="Dark Green Suvarna Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p2.jpg" alt="Suvarna Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Dark Green Suvarna Silk</h3>
+          <p>Luxurious deep green silk with golden border for festive occasions.</p>
+          <div class="product-footer">
+            <span class="price">₹6,299</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p2" data-name="Dark Green Suvarna Silk"
+              data-price="6299" data-img="p2.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Pure Silk" data-badge="Premium" data-price="7999"
+        data-name="Classic Pure Silk Saree">
+        <div class="product-img-wrap">
+          <img src="sarees/p3.jpg" alt="Pure Silk Saree" />
+          <div class="product-badge">Premium</div>
+        </div>
+        <div class="product-info">
+          <h3>Classic Pure Silk Saree</h3>
+          <p>Timeless pure silk with intricate motifs loved across generations.</p>
+          <div class="product-footer">
+            <span class="price">₹7,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p3" data-name="Classic Pure Silk Saree"
+              data-price="7999" data-img="p3.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Paithani" data-badge="Exclusive" data-price="11499"
+        data-name="Paithani Silk Saree">
+        <div class="product-img-wrap">
+          <img src="sarees/p4.webp" alt="Paithani Silk Saree" />
+          <div class="product-badge">Exclusive</div>
+        </div>
+        <div class="product-info">
+          <h3>Paithani Silk Saree</h3>
+          <p>Traditional Paithani with peacock motifs — a Maharashtra treasure.</p>
+          <div class="product-footer">
+            <span class="price">₹11,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p4" data-name="Paithani Silk Saree"
+              data-price="11499" data-img="sarees/p4.webp">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Designer" data-badge="Sale" data-price="5799"
+        data-name="Designer Silk Saree">
+        <div class="product-img-wrap">
+          <img src="sarees/p5.jpg" alt="Designer Silk Saree" />
+          <div class="product-badge">Sale</div>
+        </div>
+        <div class="product-info">
+          <h3>Designer Silk Saree</h3>
+          <p>Vibrant colours and elegant patterns for special occasions.</p>
+          <div class="product-footer">
+            <span class="price">₹5,799 <span class="old-price">₹7,500</span></span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p5" data-name="Designer Silk Saree"
+              data-price="5799" data-img="p5.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Woven" data-badge="New" data-price="9199" data-name="Royal Woven Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p6.jpg" alt="Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Royal Woven Silk</h3>
+          <p>Richly woven silk saree with traditional border and fine zari detailing.</p>
+          <div class="product-footer">
+            <span class="price">₹9,199</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p6" data-name="Royal Woven Silk"
+              data-price="9199" data-img="p6.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Paithani" data-badge="Premium" data-price="13499"
+        data-name="Rajpath Pavitra Paithani">
+        <div class="product-img-wrap">
+          <img src="sarees/p7.jpg" alt="Pavitra Paithani" />
+          <div class="product-badge">Premium</div>
+        </div>
+        <div class="product-info">
+          <h3>Rajpath Pavitra Paithani</h3>
+          <p>A signature Paithani creation with vibrant colours and peacock pallu.</p>
+          <div class="product-footer">
+            <span class="price">₹13,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p7" data-name="Rajpath Pavitra Paithani"
+              data-price="13499" data-img="p7.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Heritage" data-badge="Bestseller" data-price="10299"
+        data-name="Heritage Silk Drape">
+        <div class="product-img-wrap">
+          <img src="sarees/p8.jpg" alt="Silk Saree" />
+          <div class="product-badge">Bestseller</div>
+        </div>
+        <div class="product-info">
+          <h3>Heritage Silk Drape</h3>
+          <p>A heritage piece featuring intricate handloom work and golden zari.</p>
+          <div class="product-footer">
+            <span class="price">₹10,299</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p8" data-name="Heritage Silk Drape"
+              data-price="10299" data-img="p8.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Pure Silk" data-badge="New" data-price="8799"
+        data-name="Sudathi Silk Collection">
+        <div class="product-img-wrap">
+          <img src="sarees/p9.jpg" alt="Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Sudathi Silk Collection</h3>
+          <p>Elegant pure silk with a graceful drape perfect for weddings.</p>
+          <div class="product-footer">
+            <span class="price">₹8,799</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p9" data-name="Sudathi Silk Collection"
+              data-price="8799" data-img="p9.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Bridal" data-badge="Exclusive" data-price="14999"
+        data-name="Indian Bridal Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p10.jpg" alt="Silk Saree" />
+          <div class="product-badge">Exclusive</div>
+        </div>
+        <div class="product-info">
+          <h3>Indian Bridal Silk</h3>
+          <p>Crafted for brides — rich silk with a stunning zari border and pallu.</p>
+          <div class="product-footer">
+            <span class="price">₹14,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p10" data-name="Indian Bridal Silk"
+              data-price="14999" data-img="p10.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Paithani" data-badge="Premium" data-price="12499"
+        data-name="Paithani Pallu Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p11.jpg" alt="Paithani Silk" />
+          <div class="product-badge">Premium</div>
+        </div>
+        <div class="product-info">
+          <h3>Paithani Pallu Silk</h3>
+          <p>Stunning Paithani with exquisite pallu design and vibrant shades.</p>
+          <div class="product-footer">
+            <span class="price">₹12,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p11" data-name="Paithani Pallu Silk"
+              data-price="12499" data-img="p11.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Designer" data-badge="New" data-price="7499" data-name="Designer Woven Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p12.webp" alt="Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Designer Woven Silk</h3>
+          <p>Modern designer silk with traditional weaves and rich colour play.</p>
+          <div class="product-footer">
+            <span class="price">₹7,499</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p12" data-name="Designer Woven Silk"
+              data-price="7499" data-img="p12.webp">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Pure Silk" data-badge="Bestseller" data-price="6999"
+        data-name="Ramraj Pure Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p13.jpg" alt="Ramraj Silk Saree" />
+          <div class="product-badge">Bestseller</div>
+        </div>
+        <div class="product-info">
+          <h3>Ramraj Pure Silk</h3>
+          <p>Classic South Indian silk with a fine gold border and graceful drape.</p>
+          <div class="product-footer">
+            <span class="price">₹6,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p13" data-name="Ramraj Pure Silk"
+              data-price="6999" data-img="p13.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Kanchipuram" data-badge="Exclusive" data-price="15999"
+        data-name="Red Kanjivaram Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p14.jpg" alt="Red Kanjivaram Silk" />
+          <div class="product-badge">Exclusive</div>
+        </div>
+        <div class="product-info">
+          <h3>Red Kanjivaram Silk</h3>
+          <p>Bold red Kanjivaram with heavy zari work — the perfect wedding saree.</p>
+          <div class="product-footer">
+            <span class="price">₹15,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p14" data-name="Red Kanjivaram Silk"
+              data-price="15999" data-img="p14.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Heritage" data-badge="New" data-price="9799"
+        data-name="Nilormy Heritage Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p15.png" alt="Nilormy Silk Saree" />
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3>Nilormy Heritage Silk</h3>
+          <p>A timeless heritage silk with delicate motifs and a rich pallu border.</p>
+          <div class="product-footer">
+            <span class="price">₹9,799</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p15" data-name="Nilormy Heritage Silk"
+              data-price="9799" data-img="p15.png">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Banarasi" data-badge="Premium" data-price="11299"
+        data-name="Zari Banarasi Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p16.jpg" alt="Banarasi Silk Saree" />
+          <div class="product-badge">Premium</div>
+        </div>
+        <div class="product-info">
+          <h3>Zari Banarasi Silk</h3>
+          <p>Luxurious Banarasi silk with intricate zari weaving for special events.</p>
+          <div class="product-footer">
+            <span class="price">₹11,299</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p16" data-name="Zari Banarasi Silk"
+              data-price="11299" data-img="p16.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Kanchipuram" data-badge="Sale" data-price="8199"
+        data-name="Dusty Pink Kanchipuram">
+        <div class="product-img-wrap">
+          <img src="sarees/p17.jpg" alt="Dusty Pink Kanchipuram" />
+          <div class="product-badge">Sale</div>
+        </div>
+        <div class="product-info">
+          <h3>Dusty Pink Kanchipuram</h3>
+          <p>Elegant dusty pink Kanchipuram with zari border and unstitched blouse.</p>
+          <div class="product-footer">
+            <span class="price">₹8,199 <span class="old-price">₹10,500</span></span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p17" data-name="Dusty Pink Kanchipuram"
+              data-price="8199" data-img="p17.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-type="Bridal" data-badge="Exclusive" data-price="18999"
+        data-name="Wedding Collection Silk">
+        <div class="product-img-wrap">
+          <img src="sarees/p18.jpg" alt="Wedding Collection Silk" />
+          <div class="product-badge">Exclusive</div>
+        </div>
+        <div class="product-info">
+          <h3>Wedding Collection Silk</h3>
+          <p>From our exclusive wedding line — opulent silk for your special day.</p>
+          <div class="product-footer">
+            <span class="price">₹18,999</span>
+            <button class="add-btn" onclick="addToCart(this)" data-id="p18" data-name="Wedding Collection Silk"
+              data-price="18999" data-img="p18.jpg">Add to Cart</button>
+            <div class="qty-counter">
+              <button class="qty-btn" onclick="changeQty(this,-1)">&#8722;</button>
+              <span class="qty-count">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">&#43;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── EMPTY STATE MESSAGE ── -->
+    <div id="no-products-msg" class="no-products-msg" style="display: none;">
+      <div class="empty-icon">🍂</div>
+      <h2>Not Available</h2>
+      <p>Sorry, no sarees match your current search or filter criteria.</p>
+    </div>
+
+  </section>
+
+  <a href="cart.html" class="float-cart" id="float-cart">
+    <span class="float-cart-icon">🛒</span>
+    <span>View Cart</span>
+    <span class="float-cart-count" id="float-cart-count">0</span>
+  </a>
+
+  <script src="cart.js"></script>
+  <script src="shop.js"></script>
+  <script src="products-filter.js"></script>
+
+</body>
+
+</html>
