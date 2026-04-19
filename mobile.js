@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!navLinks) return;
         navLinks.classList.add('mobile-active');
         overlay.classList.add('show');
+        const navbar = document.querySelector('.navbar');
+        if (navbar) navbar.style.zIndex = '2000';
         if (hamburger) {
             const icon = hamburger.querySelector('span') || hamburger;
             icon.innerHTML = '✕';
@@ -26,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!navLinks) return;
         navLinks.classList.remove('mobile-active');
         overlay.classList.remove('show');
+        const navbar = document.querySelector('.navbar');
+        if (navbar) navbar.style.zIndex = '';
         if (hamburger) {
             const icon = hamburger.querySelector('span') || hamburger;
             icon.innerHTML = '☰';

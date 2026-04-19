@@ -784,3 +784,50 @@ body {
   justify-content: center;
   padding: 0 5px;
 }
+
+/* ── RESPONSIVE PRODUCT CARD SIZES ── */
+@media (max-width: 600px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .product-img-wrap {
+    height: 160px;
+  }
+  .product-info {
+    padding: 12px;
+  }
+  .product-info h3 {
+    font-size: 0.9rem;
+  }
+  .product-footer .price {
+    font-size: 0.95rem;
+  }
+  .add-btn {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+  }
+  .product-img-wrap {
+    height: 140px;
+  }
+  .product-info {
+    padding: 10px;
+  }
+  .product-info h3 {
+    font-size: 0.82rem;
+  }
+  .product-footer .price {
+    font-size: 0.88rem;
+  }
+  .add-btn {
+    padding: 6px 10px;
+    font-size: 0.65rem;
+  }
+}
