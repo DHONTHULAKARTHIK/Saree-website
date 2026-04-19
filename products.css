@@ -145,6 +145,79 @@ body {
   color: #f5d08a;
 }
 
+/* ── RESPONSIVE NAVBAR ── */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  color: #f5d08a;
+  cursor: pointer;
+  z-index: 101;
+  transition: all 0.3s ease;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  display: none;
+}
+
+.menu-overlay.show {
+  display: block;
+}
+
+@media (max-width: 950px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+  
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(10, 5, 0, 0.95);
+    backdrop-filter: blur(25px);
+    flex-direction: column;
+    padding: 100px 30px;
+    gap: 20px;
+    transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .nav-links.mobile-active {
+    right: 0;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links li a {
+    width: 100%;
+    display: block;
+    padding: 14px 24px;
+    font-size: 1rem;
+    background: rgba(197, 151, 58, 0.1);
+  }
+
+  /* Hide Cart from menu as per user request */
+  .nav-links li a[href="cart.html"] {
+    display: none;
+  }
+}
+
 /* PRODUCTS PAGE */
 .products-section {
   position: relative;
@@ -233,6 +306,64 @@ body {
 .search-input:focus {
   border-color: rgba(197, 151, 58, 0.7);
   box-shadow: 0 0 10px rgba(197, 151, 58, 0.2);
+}
+
+@media (max-width: 900px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top-toolbar {
+    width: 100%;
+    align-items: center;
+  }
+
+  .dropdowns-row {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .toolbar-item {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sort-select {
+    width: 100%;
+  }
+
+  .search-row {
+    width: 100%;
+  }
+
+  .search-input {
+    max-width: none;
+    width: 100%;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+  }
+
+  .products-section {
+    padding: 20px 15px;
+    margin-top: 100px;
+    width: calc(100% - 30px);
+  }
+
+  .product-img-wrap {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdowns-row {
+    flex-direction: column;
+  }
 }
 
 .toolbar-item {

@@ -29,7 +29,10 @@
       </div>
       <div class="input-group">
         <label for="login-pass">Password</label>
-        <input type="password" id="login-pass" placeholder="Enter your password" required/>
+        <div class="password-wrapper">
+          <input type="password" id="login-pass" placeholder="Enter your password" required/>
+          <span class="toggle-password" onclick="togglePassword('login-pass')">👁️</span>
+        </div>
       </div>
       <button type="submit" class="submit-btn">Login to Account</button>
     </form>
@@ -46,7 +49,10 @@
       </div>
       <div class="input-group">
         <label for="signup-pass">Password</label>
-        <input type="password" id="signup-pass" placeholder="Create a password" required/>
+        <div class="password-wrapper">
+          <input type="password" id="signup-pass" placeholder="Create a password" required/>
+          <span class="toggle-password" onclick="togglePassword('signup-pass')">👁️</span>
+        </div>
       </div>
       <button type="submit" class="submit-btn">Create Account</button>
     </form>

@@ -7,8 +7,15 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DB_FILE = path.join(__dirname, 'users.json');
-const ORDERS_FILE = path.join(__dirname, 'orders.json');
+const mongoose = require('mongoose');
+const User = require('./models/User');
+const Order = require('./models/Order');
+
+// Connect to MongoDB
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/saree_website';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB!'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware
 app.use(cors());
@@ -16,104 +23,87 @@ app.use(express.json());
 // Automatically serve all static HTML/CSS/JS/JPG files in the directory
 app.use(express.static(__dirname));
 
-// Helper function to read the physical users.json file
-function readUsers() {
-  if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, '[]');
-  }
-  const data = fs.readFileSync(DB_FILE, 'utf-8');
-  return JSON.parse(data || '[]');
-}
-
-// Helper function to write to the physical users.json file
-function writeUsers(users) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(users, null, 2));
-}
+// Files are no longer used as the primary database, but we keep the logic for migration if needed.
 
 // API: Handle Signups
-app.post('/api/signup', (req, res) => {
+app.post('/api/signup', async (req, res) => {
   const { name, email, pass } = req.body;
   if (!name || !email || !pass) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  const users = readUsers();
-  
-  // Check if email already exists
-  if (users.find(u => u.email === email)) {
-    return res.status(409).json({ error: 'An account with this email already exists!' });
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: 'An account with this email already exists!' });
+    }
+
+    const newUser = await User.create({ name, email, pass });
+    res.status(201).json({ message: 'User created successfully!', user: { name: newUser.name, email: newUser.email } });
+  } catch (err) {
+    console.error('Signup error:', err);
+    res.status(500).json({ error: 'Failed to create user.' });
   }
-
-  // Save new user
-  users.push({ name, email, pass });
-  writeUsers(users);
-
-  res.status(201).json({ message: 'User created successfully!', user: { name, email } });
 });
 
 // API: Handle Logins
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, pass } = req.body;
   if (!email || !pass) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
-  const users = readUsers();
-  const user = users.find(u => u.email === email && u.pass === pass);
-
-  if (!user) {
-    return res.status(401).json({ error: 'Invalid email or password.' });
+  try {
+    const user = await User.findOne({ email, pass });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+    res.status(200).json({ message: 'Login successful!', user: { name: user.name, email: user.email } });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Login failed.' });
   }
-
-  res.status(200).json({ message: 'Login successful!', user: { name: user.name, email: user.email } });
 });
 
 // API: Handle Password Updates
-app.post('/api/update-password', (req, res) => {
+app.post('/api/update-password', async (req, res) => {
   const { email, oldPass, newPass } = req.body;
   if (!email || !oldPass || !newPass) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  const users = readUsers();
-  const userIndex = users.findIndex(u => u.email === email && u.pass === oldPass);
+  try {
+    const user = await User.findOneAndUpdate(
+      { email, pass: oldPass },
+      { pass: newPass },
+      { new: true }
+    );
 
-  if (userIndex === -1) {
-    return res.status(401).json({ error: 'Invalid current password.' });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid current password.' });
+    }
+
+    res.status(200).json({ message: 'Password updated successfully!' });
+  } catch (err) {
+    console.error('Password update error:', err);
+    res.status(500).json({ error: 'Failed to update password.' });
   }
-
-  users[userIndex].pass = newPass;
-  writeUsers(users);
-
-  res.status(200).json({ message: 'Password updated successfully!' });
 });
 
-// ── Orders Database Helpers ──
-function readOrders() {
-  if (!fs.existsSync(ORDERS_FILE)) {
-    fs.writeFileSync(ORDERS_FILE, '[]');
-  }
-  const data = fs.readFileSync(ORDERS_FILE, 'utf-8');
-  return JSON.parse(data || '[]');
-}
-
-function writeOrders(orders) {
-  fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
-}
+// Orders file logic kept for migration reference
 
 // API: Place an Order
 app.post('/api/orders', async (req, res) => {
   const { userEmail, order } = req.body;
   if (!userEmail || !order) return res.status(400).json({ error: 'Missing order details.' });
 
-  const orders = readOrders();
-  order.id = 'ORD-' + Date.now();
-  order.userEmail = userEmail;
-  order.status = 'Awaiting Confirmation';
-  order.date = new Date().toISOString();
+  try {
+    order.id = 'ORD-' + Date.now();
+    order.userEmail = userEmail;
+    order.status = 'Awaiting Confirmation';
+    order.date = new Date();
 
-  orders.push(order);
-  writeOrders(orders);
+    const newOrder = await Order.create(order);
 
   // ── Send order notification email to owner ──
   try {
@@ -172,39 +162,57 @@ app.post('/api/orders', async (req, res) => {
     // Still confirm the order even if email fails
   }
 
-  res.status(201).json({ message: 'Order placed successfully!', orderId: order.id });
+    res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder.id });
+  } catch (err) {
+    console.error('Order placement error:', err);
+    res.status(500).json({ error: 'Failed to place order.' });
+  }
 });
 
 
 // API: Get My Orders
-app.get('/api/my-orders', (req, res) => {
+app.get('/api/my-orders', async (req, res) => {
   const email = req.query.email;
   if (!email) return res.status(400).json({ error: 'Email required.' });
   
-  const orders = readOrders().filter(o => o.userEmail === email);
-  res.status(200).json(orders);
+  try {
+    const orders = await Order.find({ userEmail: email }).sort({ date: -1 });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch orders.' });
+  }
 });
 
 // API: Admin Get All Orders
-app.get('/api/all-orders', (req, res) => {
+app.get('/api/all-orders', async (req, res) => {
   const adminEmail = req.query.adminEmail;
   if (adminEmail !== 'kotha.madesh@gmail.com') return res.status(403).json({ error: 'Admin access required.' });
   
-  res.status(200).json(readOrders());
+  try {
+    const orders = await Order.find().sort({ date: -1 });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch orders.' });
+  }
 });
 
 // API: Admin Update Order Status
-app.post('/api/update-order-status', (req, res) => {
+app.post('/api/update-order-status', async (req, res) => {
   const { adminEmail, orderId, status } = req.body;
   if (adminEmail !== 'kotha.madesh@gmail.com') return res.status(403).json({ error: 'Admin access required.' });
   
-  const orders = readOrders();
-  const idx = orders.findIndex(o => o.id === orderId);
-  if (idx === -1) return res.status(404).json({ error: 'Order not found.' });
-  
-  orders[idx].status = status;
-  writeOrders(orders);
-  res.status(200).json({ message: 'Order status updated successfully!' });
+  try {
+    const order = await Order.findOneAndUpdate(
+      { id: orderId },
+      { status },
+      { new: true }
+    );
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
+    
+    res.status(200).json({ message: 'Order status updated successfully!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update order status.' });
+  }
 });
 
 // ── Nodemailer Transporter ──
@@ -270,6 +278,6 @@ app.listen(PORT, () => {
   console.log(`=============================================`);
   console.log(`Backend Server Running!`);
   console.log(`Website is now hosted at: http://localhost:${PORT}`);
-  console.log(`Users database file:      ${DB_FILE}`);
+  console.log(`MongoDB connection string: ${MONGODB_URI}`);
   console.log(`=============================================`);
 });

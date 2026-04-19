@@ -73,3 +73,16 @@ async function handleAuth(event, type) {
     btn.style.opacity = "1";
   }
 }
+
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const icon = input.nextElementSibling;
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    icon.textContent = '👁️';
+  }
+}

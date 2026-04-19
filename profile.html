@@ -23,12 +23,40 @@
       <li><a href="contact.html">Contact</a></li>
       <li><a href="cart.html">Cart <span class="cart-badge" id="cart-badge">0</span></a></li>
     </ul>
+    <div class="hamburger"><span>☰</span></div>
   </nav>
+
+  <!-- MOBILE: overlay + toggle button + slide-in sidebar -->
+  <div class="dash-menu-overlay" id="dash-menu-overlay" onclick="closeDashMenu()"></div>
+
+  <div class="dash-menu-toggle" id="dash-menu-toggle" onclick="toggleDashMenu()">
+    <span>☰</span> My Account
+  </div>
+
+  <!-- MOBILE SIDEBAR — direct child of body (no animation parent) -->
+  <aside class="dashboard-sidebar mobile-only" id="dashboard-sidebar">
+    <div class="sidebar-header">
+      <button class="sidebar-close-btn" onclick="closeDashMenu()" title="Close">✕</button>
+      <div class="profile-avatar-small"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+      <div class="sidebar-user-info">
+        <h3 id="sidebar-name-mob">–</h3>
+        <p id="sidebar-email-mob">–</p>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <button class="tab-btn active" onclick="switchTab('details', event); closeDashMenu()">📋 My Details</button>
+      <button class="tab-btn" onclick="switchTab('password', event); closeDashMenu()">🔐 Change Password</button>
+      <button class="tab-btn" onclick="switchTab('orders', event); closeDashMenu()">🛍️ My Orders</button>
+      <button class="tab-btn" onclick="switchTab('addresses', event); closeDashMenu()">📍 Saved Addresses</button>
+      <button class="tab-btn logout-item" onclick="logoutUser()">🚪 Log Out</button>
+    </div>
+  </aside>
 
   <!-- DASHBOARD SECTION -->
   <div class="dashboard-wrapper">
-    <!-- Sidebar -->
-    <aside class="dashboard-sidebar">
+
+    <!-- DESKTOP SIDEBAR — inside wrapper, normal flex layout -->
+    <aside class="dashboard-sidebar desktop-only">
       <div class="sidebar-header">
         <div class="profile-avatar-small"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
         <div class="sidebar-user-info">
@@ -47,7 +75,7 @@
 
     <!-- Content Area -->
     <main class="dashboard-content">
-      
+
       <!-- TAB: Details -->
       <section id="tab-details" class="tab-panel active">
         <h2 class="panel-title">My Details</h2>
@@ -75,15 +103,24 @@
         <form class="password-form" onsubmit="handlePasswordChange(event)">
           <div class="form-group">
             <label for="old-pass">Current Password</label>
-            <input type="password" id="old-pass" required placeholder="Enter current password"/>
+            <div class="password-wrapper">
+              <input type="password" id="old-pass" required placeholder="Enter current password"/>
+              <span class="toggle-password" onclick="togglePassword('old-pass')">👁️</span>
+            </div>
           </div>
           <div class="form-group">
             <label for="new-pass">New Password</label>
-            <input type="password" id="new-pass" required placeholder="Enter new password (min. 6 chars)" minlength="6"/>
+            <div class="password-wrapper">
+              <input type="password" id="new-pass" required placeholder="Enter new password (min. 6 chars)" minlength="6"/>
+              <span class="toggle-password" onclick="togglePassword('new-pass')">👁️</span>
+            </div>
           </div>
           <div class="form-group">
             <label for="confirm-pass">Confirm New Password</label>
-            <input type="password" id="confirm-pass" required placeholder="Confirm your new password" minlength="6"/>
+            <div class="password-wrapper">
+              <input type="password" id="confirm-pass" required placeholder="Confirm your new password" minlength="6"/>
+              <span class="toggle-password" onclick="togglePassword('confirm-pass')">👁️</span>
+            </div>
           </div>
           <div id="pass-msg" class="form-msg"></div>
           <button type="submit" class="action-btn" id="pass-submit-btn">Update Password</button>
@@ -114,7 +151,7 @@
           <span class="add-icon">+</span>
           <p>Add New Address</p>
         </div>
-        
+
         <!-- Address Form (Hidden) -->
         <form id="address-form" class="address-form hidden" onsubmit="saveAddress(event)">
           <h3>Add Shipping Address</h3>
@@ -157,7 +194,30 @@
     </div>
   </footer>
 
+  <a href="cart.html" class="float-cart" id="float-cart">
+    <span class="float-cart-icon">🛒</span>
+    <span>View Cart</span>
+    <span class="float-cart-count" id="float-cart-count">0</span>
+  </a>
+
   <script src="cart.js"></script>
   <script src="profile.js"></script>
+  <script src="mobile.js"></script>
+
+  <!-- Sync mobile sidebar names from profile.js data -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const syncMob = () => {
+        const n = document.getElementById('sidebar-name');
+        const e = document.getElementById('sidebar-email');
+        const nm = document.getElementById('sidebar-name-mob');
+        const em = document.getElementById('sidebar-email-mob');
+        if (n && nm) nm.textContent = n.textContent;
+        if (e && em) em.textContent = e.textContent;
+      };
+      // Sync after profile.js has a chance to populate
+      setTimeout(syncMob, 800);
+    });
+  </script>
 </body>
 </html>
