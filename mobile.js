@@ -67,36 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Inject close button inside the sliding nav-links
-    if (navLinks) {
-        const closeBtn = document.createElement('div');
-        closeBtn.innerHTML = '✕';
-        closeBtn.className = 'nav-close-btn';
-        navLinks.prepend(closeBtn);
-        closeBtn.addEventListener('click', closeMenu);
-
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .nav-close-btn {
-                display: none;
-                position: absolute;
-                top: 25px;
-                right: 25px;
-                color: #f5d08a;
-                font-size: 1.8rem;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-                z-index: 1001;
-            }
-            .nav-close-btn:hover {
-                transform: scale(1.1);
-            }
-            @media (max-width: 900px) {
-                .nav-close-btn { display: block; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
 });
 
 /* ─────────────────────────────────────────────
