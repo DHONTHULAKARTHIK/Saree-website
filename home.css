@@ -99,6 +99,11 @@ body {
   box-shadow: 0 0 22px rgba(197, 151, 58, 0.6);
 }
 
+.profile-nav-link {
+  opacity: 0;
+  animation: fadeSlide 1s ease 0.8s forwards;
+}
+
 .nav-links {
   list-style: none;
   display: flex;
@@ -321,6 +326,8 @@ body {
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   opacity: 0;
   animation: cardFadeUp 0.8s ease forwards;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:nth-child(1) {
@@ -390,6 +397,9 @@ body {
 
 .product-info {
   padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-info h3 {
@@ -408,6 +418,7 @@ body {
 }
 
 .product-footer {
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -875,5 +886,31 @@ body {
   .add-btn {
     padding: 6px 10px;
     font-size: 0.65rem;
+  }
+}
+
+/* ── RESPONSIVE FOOTER ── */
+@media (max-width: 900px) {
+  .footer-top {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  
+  .footer-brand .footer-logo {
+    margin: 0 auto 12px;
+  }
+  
+  .footer-contact p, .footer-links a {
+    word-break: break-word;
   }
 }

@@ -467,6 +467,8 @@ body {
   opacity: 0;
   animation: cardFadeUp 0.8s ease forwards;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:nth-child(1) {
@@ -616,6 +618,9 @@ body {
 
 .product-info {
   padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-info h3 {
@@ -634,6 +639,7 @@ body {
 }
 
 .product-footer {
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;

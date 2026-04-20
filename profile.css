@@ -72,7 +72,7 @@
 .dash-menu-toggle {
   display: none;
   position: fixed;
-  top: 70px;         /* just below the fixed navbar */
+  top: 90px;         /* moved down to avoid overlap with navbar */
   left: 15px;
   z-index: 998;
   background: rgba(10, 5, 0, 0.85);
@@ -89,8 +89,10 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   gap: 8px;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
   user-select: none;
+  opacity: 0;
+  animation: slideDown 1s ease 0.8s forwards;
 }
 
 .dash-menu-toggle:hover {
@@ -346,13 +348,6 @@
   flex-direction: column;
 }
 
-.sidebar-header {
-  padding: 30px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  text-align: center;
-  border-bottom: 1px solid rgba(197, 151, 58, 0.2);
-}
-
 .profile-avatar-small {
   width: 60px;
   height: 60px;
@@ -377,12 +372,6 @@
 .sidebar-user-info p {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.85rem;
-}
-
-.sidebar-menu {
-  padding: 20px 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .tab-btn {
@@ -437,13 +426,49 @@
   position: relative;
 }
 
+.sidebar-header {
+  padding: 30px 20px;
+  background: rgba(0, 0, 0, 0.2);
+  text-align: center;
+  border-bottom: 1px solid rgba(197, 151, 58, 0.2);
+  opacity: 0;
+  animation: slideDown 1s ease 0.5s forwards;
+}
+
+.sidebar-menu {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  animation: sectionFadeUp 1s ease 0.8s forwards;
+}
+
 .tab-panel {
   display: none;
-  animation: fadeSlide 0.5s ease forwards;
 }
 
 .tab-panel.active {
   display: block;
+}
+
+.tab-panel.active .panel-title {
+  opacity: 0;
+  animation: fadeSlide 0.8s ease 0.2s forwards;
+}
+
+.tab-panel.active .panel-divider {
+  opacity: 0;
+  animation: fadeSlide 0.8s ease 0.4s forwards;
+}
+
+.tab-panel.active .details-card,
+.tab-panel.active .password-form,
+.tab-panel.active #orders-list,
+.tab-panel.active .orders-empty,
+.tab-panel.active .address-grid,
+.tab-panel.active .add-address-card {
+  opacity: 0;
+  animation: sectionFadeUp 0.8s ease 0.6s forwards;
 }
 
 .panel-title {
