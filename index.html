@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Saree Website</title>
+  <meta name="theme-color" content="#c9973a" />
+  <meta name="description" content="Shop authentic handloom pure silk sarees from Dharmavaram" />
+  <title>Lakshmanna Pure Silk Sarees</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/logo.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -14,5 +18,10 @@
     <h1 class="title"><span class="title-text">Lakshmanna Pure Silk Sarees</span></h1>
     <a href="login.html" class="enter-btn">Login / Sign In</a>
   </div>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(console.error);
+  }
+</script>
 </body>
 </html>
