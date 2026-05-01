@@ -987,3 +987,157 @@ body {
     transform: scale(1) rotate(-5deg);
   }
 }
+
+/* ── PAYMENT TRUST BADGES ── */
+.payment-trust-badges {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.trust-badge {
+  display: block;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pay-icon {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(197, 151, 58, 0.2);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: default;
+  pointer-events: none;
+}
+
+.checkout-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── PAYMENT METHOD SELECTOR ── */
+.payment-method-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.payment-method-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(197, 151, 58, 0.2);
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payment-method-option:hover {
+  border-color: rgba(197, 151, 58, 0.5);
+}
+
+.payment-method-option.active {
+  border-color: #f5d08a;
+  background: rgba(197, 151, 58, 0.15);
+  box-shadow: 0 0 10px rgba(197, 151, 58, 0.2);
+}
+
+.method-icon {
+  font-size: 1.8rem;
+}
+
+.method-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.method-details strong {
+  font-size: 0.95rem;
+  color: #f5d08a;
+  margin-bottom: 2px;
+}
+
+.method-details span {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── SMALL PHONE FIX (≤480px) – prevent horizontal overflow in cart ── */
+@media (max-width: 480px) {
+  .cart-item {
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .cart-item-controls {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .cart-item-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .cart-item-name {
+    font-size: 0.88rem;
+  }
+
+  .cart-qty {
+    min-width: 88px;
+    height: 30px;
+  }
+
+  .cart-qty-btn {
+    width: 28px;
+    font-size: 1rem;
+  }
+
+  .remove-btn {
+    font-size: 0.75rem;
+    padding: 5px 12px;
+  }
+
+  .cart-item-subtotal {
+    font-size: 0.9rem;
+  }
+
+  .cart-section {
+    padding: 16px 10px;
+    margin-top: 90px;
+    width: calc(100% - 20px);
+  }
+
+  .summary-section {
+    padding: 16px;
+  }
+
+  .checkout-submit-btn {
+    font-size: 0.85rem;
+    padding: 13px 20px;
+  }
+}

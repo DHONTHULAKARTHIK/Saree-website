@@ -16,7 +16,7 @@ body {
 .bg-image {
   position: fixed;
   inset: 0;
-  background: url('bg images/about-bg.jpg') center center / cover no-repeat;
+  background: url('https://varanchi.com/cdn/shop/files/all_sarees_banner_new_copy.jpg?v=1728969871&width=3200') center center / cover no-repeat;
   opacity: 0;
   animation: fadeIn 3s ease forwards;
   z-index: 0;

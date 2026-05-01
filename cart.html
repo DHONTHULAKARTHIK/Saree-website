@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#c9973a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Lakshmanna Sarees" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/logo.jpg" />
   <title>My Cart – Lakshmanna Pure Silk Sarees</title>
   <link rel="stylesheet" href="cart.css"/>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -14,7 +20,7 @@
   <nav class="navbar">
     <div style="display: flex; align-items: center; gap: 15px;">
       <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo"/></a>
-      <a href="profile.html" class="profile-nav-link" style="text-decoration: none; color: #f0d9a0; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: rgba(10, 5, 0, 0.3); border: 1px solid rgba(197, 151, 58, 0.3); backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Profile</a>
+      <a href="#" onclick="checkProfileAccess(event)" class="profile-nav-link" style="text-decoration: none; color: #f0d9a0; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: rgba(10, 5, 0, 0.3); border: 1px solid rgba(197, 151, 58, 0.3); backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Profile</a>
     </div>
     <ul class="nav-links">
       <li><a href="home.html">Home</a></li>
@@ -67,6 +73,13 @@
             <span>Total</span>
             <span id="summary-total">₹0</span>
           </div>
+          <!-- G: Coupon Code -->
+          <div id="coupon-row" style="margin:10px 0; display:flex; gap:8px;">
+            <input type="text" id="coupon-input" placeholder="Coupon code"
+              style="flex:1; padding:10px 14px; background:rgba(255,255,255,0.07); border:1px solid rgba(197,151,58,0.3); border-radius:50px; color:#fff; font-family:'Georgia',serif; font-size:0.82rem; outline:none;" />
+            <button onclick="applyCoupon()" style="padding:10px 18px; background:linear-gradient(135deg,#f5d08a,#c9973a); color:#1a0a00; border:none; border-radius:50px; font-size:0.78rem; font-weight:700; letter-spacing:1px; cursor:pointer; white-space:nowrap;">Apply</button>
+          </div>
+          <div id="coupon-msg" style="font-size:0.78rem; margin-bottom:6px; display:none;"></div>
           <button class="checkout-btn" onclick="openAddressModal()">Place Order →</button>
           <a href="products.html" class="continue-link">← Continue Shopping</a>
           <div id="discount-hint" class="discount-hint" style="display:none;"></div>
@@ -82,6 +95,7 @@
 
       </div>
     </div>
+
 
     <!-- ADDRESS SELECTION MODAL -->
     <div class="modal-overlay" id="address-modal">
@@ -99,11 +113,42 @@
         </div>
 
         <h4 class="addr-section-title">Or Enter A New Address</h4>
-        <textarea id="custom-address-input" class="custom-address-textarea" onfocus="document.querySelectorAll('.modal-addr-card').forEach(c => c.classList.remove('selected')); selectedAddressString = '';" placeholder="Enter Full Address (Street, City, State)"></textarea>
+        <input type="text" id="custom-name-input" class="custom-address-textarea" style="height:auto;" onfocus="document.querySelectorAll('.modal-addr-card').forEach(c => c.classList.remove('selected')); selectedAddressString = '';" placeholder="Enter Full Name *" />
+        <textarea id="custom-address-input" class="custom-address-textarea" style="margin-top:-5px;" onfocus="document.querySelectorAll('.modal-addr-card').forEach(c => c.classList.remove('selected')); selectedAddressString = '';" placeholder="Enter Full Address (Street, City, State) *"></textarea>
         <input type="text" id="custom-pin-input" class="custom-address-textarea" style="height:auto; margin-top:-5px;" onfocus="document.querySelectorAll('.modal-addr-card').forEach(c => c.classList.remove('selected')); selectedAddressString = '';" placeholder="Enter PIN Code *" />
         
         <div id="modal-msg" class="addr-msg" style="display:none;">Please select or enter a delivery address.</div>
-        <button class="checkout-submit-btn" onclick="confirmCheckout()">Proceed to Checkout</button>
+        
+        <h4 class="addr-section-title" style="margin-top:15px;">Payment Method</h4>
+        <div class="payment-method-selector">
+          <label class="payment-method-option active" id="method-online" onclick="selectPaymentMethod('online')">
+            <input type="radio" name="payment_method" value="online" checked style="display:none;">
+            <div class="method-icon">💳</div>
+            <div class="method-details">
+              <strong>Online Payment</strong>
+              <span>UPI, Cards, Netbanking</span>
+            </div>
+          </label>
+          <label class="payment-method-option" id="method-cod" onclick="selectPaymentMethod('cod')">
+            <input type="radio" name="payment_method" value="cod" style="display:none;">
+            <div class="method-icon">💵</div>
+            <div class="method-details">
+              <strong>Cash on Delivery (COD)</strong>
+              <span>Pay when you receive</span>
+            </div>
+          </label>
+        </div>
+
+        <button class="checkout-submit-btn" id="payment-btn" onclick="confirmCheckout()">Proceed to Payment 🔒</button>
+        <div class="payment-trust-badges" id="trust-badges">
+          <span class="trust-badge">🔒 Secured by Razorpay</span>
+          <div class="payment-icons">
+            <span class="pay-icon">UPI</span>
+            <span class="pay-icon">VISA</span>
+            <span class="pay-icon">MC</span>
+            <span class="pay-icon">NB</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>

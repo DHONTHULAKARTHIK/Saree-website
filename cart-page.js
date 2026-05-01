@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   cart-page.js  –  Cart page logic
+   cart-page.js  –  Cart page logic with Razorpay
    Used on: cart.html
 ───────────────────────────────────────────── */
 
@@ -99,7 +99,60 @@ function renderCart() {
     }
   }
 
-  document.getElementById('summary-total').textContent = formatPrice(finalTotal);
+  // G – Apply coupon on top of tier discount
+  let couponAmt = 0;
+  if (activeCoupon) {
+    if (activeCoupon.type === 'pct')  couponAmt = Math.round(finalTotal * activeCoupon.value / 100);
+    if (activeCoupon.type === 'flat') couponAmt = Math.min(activeCoupon.value, finalTotal);
+    const grandTotal = finalTotal - couponAmt;
+    if (discountRow) {
+      discountRow.style.display = '';
+      discountLabel.textContent = discountPct > 0
+        ? `Bulk Discount (${discountPct}%) + Coupon`
+        : `Coupon (${activeCoupon.code})`;
+      discountEl.textContent = `- ${formatPrice(discountAmt + couponAmt)}`;
+    }
+    document.getElementById('summary-total').textContent = formatPrice(grandTotal);
+  } else {
+    document.getElementById('summary-total').textContent = formatPrice(finalTotal);
+  }
+}
+
+/* ── G: Coupon Code ── */
+let activeCoupon = null; // { code, type:'pct'|'flat', value }
+
+async function applyCoupon() {
+  const code   = document.getElementById('coupon-input')?.value.trim().toUpperCase();
+  const msgEl  = document.getElementById('coupon-msg');
+  if (!code) return;
+
+  msgEl.style.display = 'block';
+  msgEl.style.color   = 'rgba(255,255,255,0.6)';
+  msgEl.textContent   = 'Checking code...';
+
+  try {
+    const res  = await fetch('/api/validate-coupon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      activeCoupon = null;
+      msgEl.style.color = '#ff9090';
+      msgEl.textContent = data.error || 'Invalid coupon code.';
+    } else {
+      activeCoupon = { code: data.code, type: data.type, value: data.value };
+      msgEl.style.color = '#7ecb7e';
+      const desc = data.type === 'pct' ? `${data.value}% off` : `₹${data.value} off`;
+      msgEl.textContent = `✅ "${data.code}" applied – ${desc}!`;
+    }
+  } catch {
+    msgEl.style.color = '#ff9090';
+    msgEl.textContent = 'Could not verify coupon. Try again.';
+  }
+  renderCart(); // recalculate total
 }
 
 function updateQty(id, delta) {
@@ -119,49 +172,70 @@ function removeItem(id) {
 
 let selectedAddressString = "";
 
-function openAddressModal() {
+async function openAddressModal() {
   const cart = getCart();
   if (cart.length === 0) {
     alert("Your cart is empty!");
     return;
   }
-  
-  const modal = document.getElementById('address-modal');
+
+  // If not logged in, show the shared login-guard modal
   const userStr = localStorage.getItem('lakshmanna_current_user');
+  if (!userStr) {
+    showLoginGuard('cart.html', 'Please login to place your order. Your cart items will be saved!');
+    return;
+  }
+
+  const modal = document.getElementById('address-modal');
   const listContainer = document.getElementById('saved-addresses-container');
   const list = document.getElementById('saved-addresses-list');
   
-  list.innerHTML = '';
+  list.innerHTML = '<p style="color:#f5d08a; padding:10px;">Loading your addresses...</p>';
+  listContainer.style.display = 'block';
   selectedAddressString = "";
   document.getElementById('custom-address-input').value = "";
+  if (document.getElementById('custom-name-input')) {
+    document.getElementById('custom-name-input').value = "";
+  }
+  if (document.getElementById('custom-pin-input')) {
+    document.getElementById('custom-pin-input').value = "";
+  }
   document.getElementById('modal-msg').style.display = 'none';
+  
+  modal.classList.add('show');
 
   if (userStr) {
-    const user = JSON.parse(userStr);
-    const addrs = localStorage.getItem('lakshmanna_addresses_' + user.email);
-    if (addrs) {
-      const parsedAddrs = JSON.parse(addrs);
-      if (parsedAddrs.length > 0) {
-        listContainer.style.display = 'block';
-        parsedAddrs.forEach((addr, idx) => {
-          const addrStr = `${addr.name}\n${addr.street}, ${addr.city}\n${addr.state} - ${addr.pin}`;
-          const div = document.createElement('div');
-          div.className = 'modal-addr-card';
-          div.innerHTML = `<h4>${addr.name}</h4><p>${addr.street}, ${addr.city}</p>`;
-          div.onclick = () => selectAddress(div, addrStr);
-          list.appendChild(div);
-        });
+    try {
+      const user = JSON.parse(userStr);
+      const res = await fetch(`/api/addresses?email=${encodeURIComponent(user.email)}`);
+      
+      if (res.ok) {
+        const parsedAddrs = await res.json();
+        list.innerHTML = ''; // Clear loading text
+        
+        if (parsedAddrs.length > 0) {
+          listContainer.style.display = 'block';
+          parsedAddrs.forEach((addr) => {
+            const addrStr = `${addr.name}\n${addr.street}, ${addr.city}\n${addr.state} - ${addr.pin}`;
+            const div = document.createElement('div');
+            div.className = 'modal-addr-card';
+            div.innerHTML = `<h4>${addr.name}</h4><p>${addr.street}, ${addr.city}</p>`;
+            div.onclick = () => selectAddress(div, addrStr);
+            list.appendChild(div);
+          });
+        } else {
+          listContainer.style.display = 'none';
+        }
       } else {
         listContainer.style.display = 'none';
       }
-    } else {
+    } catch(err) {
+      console.error("Failed to fetch addresses:", err);
       listContainer.style.display = 'none';
     }
   } else {
     listContainer.style.display = 'none';
   }
-  
-  modal.classList.add('show');
 }
 
 function closeAddressModal() {
@@ -178,14 +252,33 @@ function selectAddress(element, addrStr) {
   }
 }
 
+function selectPaymentMethod(method) {
+  document.querySelectorAll('.payment-method-option').forEach(el => el.classList.remove('active'));
+  document.getElementById('method-' + method).classList.add('active');
+  document.querySelector(`input[name="payment_method"][value="${method}"]`).checked = true;
+
+  const btn = document.getElementById('payment-btn');
+  const trustBadges = document.getElementById('trust-badges');
+  
+  if (method === 'cod') {
+    btn.textContent = 'Place Order (COD)';
+    if (trustBadges) trustBadges.style.display = 'none';
+  } else {
+    btn.textContent = 'Proceed to Payment 🔒';
+    if (trustBadges) trustBadges.style.display = 'block';
+  }
+}
+
 async function confirmCheckout() {
-  const customStr = document.getElementById('custom-address-input').value.trim();
-  const pinInput  = document.getElementById('custom-pin-input');
-  const customPin = pinInput ? pinInput.value.trim() : '';
+  const nameInput   = document.getElementById('custom-name-input');
+  const customName  = nameInput ? nameInput.value.trim() : '';
+  const customStr   = document.getElementById('custom-address-input').value.trim();
+  const pinInput    = document.getElementById('custom-pin-input');
+  const customPin   = pinInput ? pinInput.value.trim() : '';
 
   let manualAddress = '';
   if (customStr) {
-    manualAddress = customStr + (customPin ? `\nPIN Code: ${customPin}` : '');
+    manualAddress = (customName ? `${customName}\n` : '') + customStr + (customPin ? `\nPIN Code: ${customPin}` : '');
   }
 
   const finalAddr = manualAddress || selectedAddressString;
@@ -197,8 +290,8 @@ async function confirmCheckout() {
     return;
   }
 
-  if (customStr && !customPin && pinInput) {
-    msgEl.textContent = 'Please provide your PIN Code as well.';
+  if (customStr && (!customPin || !customName)) {
+    msgEl.textContent = 'Please provide your Full Name, Address, and PIN Code.';
     msgEl.style.display = 'block';
     return;
   }
@@ -215,50 +308,166 @@ async function confirmCheckout() {
   // Identify user
   const userStr = localStorage.getItem('lakshmanna_current_user');
   let userEmail = 'Guest Customer';
+  let userName  = 'Customer';
   if (userStr) {
-    try { userEmail = JSON.parse(userStr).email; } catch(e) {}
+    try {
+      const parsed = JSON.parse(userStr);
+      if (!parsed.email) {
+        localStorage.removeItem('lakshmanna_current_user');
+        alert('Your session is outdated. Please log in again.');
+        window.location.href = 'login.html';
+        return;
+      }
+      userEmail = parsed.email;
+      userName  = parsed.name || 'Customer';
+    } catch(e) {
+      localStorage.removeItem('lakshmanna_current_user');
+      window.location.href = 'login.html';
+      return;
+    }
   }
+
+  // Get selected payment method
+  const methodRadio = document.querySelector('input[name="payment_method"]:checked');
+  const selectedMethod = methodRadio ? methodRadio.value : 'online';
 
   // Disable button while processing
   const submitBtn = document.querySelector('.checkout-submit-btn');
-  if (submitBtn) { submitBtn.textContent = 'Placing Order…'; submitBtn.disabled = true; }
+  if (submitBtn) { submitBtn.textContent = 'Processing…'; submitBtn.disabled = true; }
 
   try {
-    const res = await fetch('/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    if (selectedMethod === 'cod') {
+      // ─── COD FLOW ───
+      const orderPayload = {
         userEmail,
         order: {
           items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, img: i.img })),
           total,
           address: finalAddr
         }
-      })
+      };
+
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload)
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to place COD order');
+
+      // Clear cart and close modal
+      saveCart([]);
+      sessionStorage.setItem('lakshmanna_order_placed', '1');
+      closeAddressModal();
+      renderCart();
+
+      // Show success overlay
+      showOrderSuccess(data.orderId, total, 'Cash on Delivery');
+      if (submitBtn) { submitBtn.textContent = 'Place Order (COD)'; submitBtn.disabled = false; }
+      
+    } else {
+      // ─── RAZORPAY FLOW ───
+      // Step 1: Create Razorpay order on server
+      const createRes = await fetch('/api/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total })
+      });
+
+    const createData = await createRes.json();
+    if (!createRes.ok) throw new Error(createData.error || 'Could not initiate payment');
+
+    // Step 2: Open Razorpay checkout popup
+    const options = {
+      key:         createData.keyId,
+      amount:      createData.amount,
+      currency:    createData.currency,
+      name:        'Lakshmanna Pure Silk Sarees',
+      description: `Order of ${totalQty} saree(s)`,
+      image:       '/logo.jpg',
+      order_id:    createData.orderId,
+      prefill: {
+        name:  userName,
+        email: userEmail === 'Guest Customer' ? '' : userEmail
+      },
+      theme: { color: '#c9973a' },
+
+      handler: async function(response) {
+        // Step 3: Verify payment on backend and save order
+        try {
+          if (submitBtn) { submitBtn.textContent = 'Verifying Payment…'; submitBtn.disabled = true; }
+
+          const verifyRes = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+              userEmail,
+              order: {
+                items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, img: i.img })),
+                total,
+                address: finalAddr
+              }
+            })
+          });
+
+          const verifyData = await verifyRes.json();
+          if (!verifyRes.ok) throw new Error(verifyData.error || 'Verification failed');
+
+          // Clear cart and close modal
+          saveCart([]);
+          sessionStorage.setItem('lakshmanna_order_placed', '1');
+          closeAddressModal();
+          renderCart();
+
+          // Show success overlay
+          showOrderSuccess(verifyData.orderId, total, response.razorpay_payment_id);
+
+        } catch (verifyErr) {
+          console.error('Verification failed:', verifyErr);
+          msgEl.textContent = '❌ Payment received but verification failed. Please contact us with your payment ID: ' + response.razorpay_payment_id;
+          msgEl.style.display = 'block';
+        } finally {
+          if (submitBtn) { submitBtn.textContent = 'Proceed to Payment 🔒'; submitBtn.disabled = false; }
+        }
+      },
+
+      modal: {
+        ondismiss: function() {
+          // User closed the Razorpay popup without paying
+          if (submitBtn) { submitBtn.textContent = 'Proceed to Payment 🔒'; submitBtn.disabled = false; }
+          msgEl.textContent = '⚠️ Payment was cancelled. You can try again.';
+          msgEl.style.display = 'block';
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(response) {
+      msgEl.textContent = '❌ Payment failed: ' + (response.error.description || 'Unknown error');
+      msgEl.style.display = 'block';
+      if (submitBtn) { submitBtn.textContent = 'Proceed to Payment 🔒'; submitBtn.disabled = false; }
     });
 
-    const data = await res.json();
+    rzp.open();
 
-    if (!res.ok) throw new Error(data.error || 'Server error');
-
-    // Clear cart and close modal
-    localStorage.removeItem(CART_KEY);
-    closeAddressModal();
-    renderCart();
-
-    // Show success overlay
-    showOrderSuccess(data.orderId, total);
+    } // End of selectedMethod check
 
   } catch (err) {
-    console.error('Order failed:', err);
-    msgEl.textContent = '❌ Failed to place order. Please try again.';
+    console.error('Checkout error:', err);
+    msgEl.textContent = '❌ ' + (err.message || 'Failed to process order. Please try again.');
     msgEl.style.display = 'block';
-  } finally {
-    if (submitBtn) { submitBtn.textContent = 'Proceed to Checkout'; submitBtn.disabled = false; }
+    if (submitBtn) { 
+      submitBtn.textContent = selectedMethod === 'cod' ? 'Place Order (COD)' : 'Proceed to Payment 🔒'; 
+      submitBtn.disabled = false; 
+    }
   }
 }
 
-function showOrderSuccess(orderId, total) {
+function showOrderSuccess(orderId, total, paymentId) {
   // Remove existing overlay if any
   const existing = document.getElementById('order-success-overlay');
   if (existing) existing.remove();
@@ -268,19 +477,20 @@ function showOrderSuccess(orderId, total) {
   overlay.innerHTML = `
     <div class="order-success-box">
       <div class="success-tick">✅</div>
-      <h2>Order Placed!</h2>
-      <p>Your order has been received and the owner has been notified.</p>
+      <h2>Payment Successful!</h2>
+      <p>Your order has been placed and the owner has been notified.</p>
       <div class="success-details">
         <span>Order ID: <strong>${orderId}</strong></span>
-        <span>Total: <strong>${formatPrice(total)}</strong></span>
+        <span>Total Paid: <strong>${formatPrice(total)}</strong></span>
+        <span style="font-size:0.8em; color:rgba(255,255,255,0.6);">Payment Ref: ${paymentId}</span>
       </div>
       <p class="success-note">You can track the status in <a href="profile.html">My Orders</a>.</p>
       <button onclick="document.getElementById('order-success-overlay').remove()">Close</button>
     </div>
   `;
   document.body.appendChild(overlay);
-  // Auto-remove after 12 seconds
-  setTimeout(() => overlay.remove(), 12000);
+  // Auto-remove after 15 seconds
+  setTimeout(() => overlay.remove(), 15000);
 }
 
 // Init on page load

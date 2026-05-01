@@ -13,10 +13,11 @@
   <div class="auth-container">
     <div class="auth-header">
       <img src="logo.jpg" alt="Logo" class="auth-logo"/>
-      <h1 class="auth-title">Welcome</h1>
+      <h1 class="auth-title" id="auth-title">Welcome</h1>
     </div>
 
-    <div class="auth-toggle">
+    <!-- ── Login / Signup Toggle (hidden during forgot-password flow) ── -->
+    <div class="auth-toggle" id="auth-toggle">
       <button class="toggle-btn active" onclick="switchTab('login')">Login</button>
       <button class="toggle-btn" onclick="switchTab('signup')">Sign Up</button>
     </div>
@@ -33,6 +34,9 @@
           <input type="password" id="login-pass" placeholder="Enter your password" required/>
           <span class="toggle-password" onclick="togglePassword('login-pass')">👁️</span>
         </div>
+      </div>
+      <div style="text-align:right; margin-top:-10px;">
+        <a href="#" onclick="showForgotStep1(event)" class="forgot-link">Forgot Password?</a>
       </div>
       <button type="submit" class="submit-btn">Login to Account</button>
     </form>
@@ -57,8 +61,53 @@
       <button type="submit" class="submit-btn">Create Account</button>
     </form>
 
-    <div class="skip-link">
-      <a href="home.html">← Skip & Continue as Guest</a>
+    <!-- ── FORGOT PASSWORD: Step 1 – Enter Email ── -->
+    <form id="form-forgot-1" class="auth-form" onsubmit="sendResetCode(event)">
+      <p class="fp-hint">Enter your registered email address and we'll send you a 6-digit reset code.</p>
+      <div class="input-group">
+        <label for="fp-email">Email Address</label>
+        <input type="email" id="fp-email" placeholder="Enter your account email" required/>
+      </div>
+      <div id="fp-msg-1" class="fp-msg" style="display:none;"></div>
+      <button type="submit" class="submit-btn" id="fp-send-btn">Send Reset Code</button>
+      <button type="button" class="back-btn" onclick="showLoginTab()">← Back to Login</button>
+    </form>
+
+    <!-- ── FORGOT PASSWORD: Step 2 – Enter Code ── -->
+    <form id="form-forgot-2" class="auth-form" onsubmit="verifyResetCode(event)">
+      <p class="fp-hint">A 6-digit code was sent to <strong id="fp-sent-to"></strong>. Enter it below.</p>
+      <div class="input-group">
+        <label for="fp-code">Reset Code</label>
+        <input type="text" id="fp-code" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" required/>
+      </div>
+      <div id="fp-msg-2" class="fp-msg" style="display:none;"></div>
+      <button type="submit" class="submit-btn" id="fp-verify-btn">Verify Code</button>
+      <button type="button" class="back-btn" onclick="showForgotStep1(null)">← Resend Code</button>
+    </form>
+
+    <!-- ── FORGOT PASSWORD: Step 3 – New Password ── -->
+    <form id="form-forgot-3" class="auth-form" onsubmit="resetPassword(event)">
+      <p class="fp-hint">Great! Now set your new password.</p>
+      <div class="input-group">
+        <label for="fp-newpass">New Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="fp-newpass" placeholder="Enter new password" required/>
+          <span class="toggle-password" onclick="togglePassword('fp-newpass')">👁️</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="fp-confirmpass">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="fp-confirmpass" placeholder="Confirm new password" required/>
+          <span class="toggle-password" onclick="togglePassword('fp-confirmpass')">👁️</span>
+        </div>
+      </div>
+      <div id="fp-msg-3" class="fp-msg" style="display:none;"></div>
+      <button type="submit" class="submit-btn" id="fp-reset-btn">Reset Password</button>
+    </form>
+
+    <div class="skip-link" id="skip-link">
+      <a href="#" onclick="continueAsGuest(event)">← Skip &amp; Continue as Guest</a>
     </div>
   </div>
 

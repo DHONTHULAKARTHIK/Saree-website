@@ -18,7 +18,7 @@
   <nav class="navbar">
     <div style="display: flex; align-items: center; gap: 15px;">
       <a href="index.html"><img src="logo.jpg" alt="Logo" class="nav-logo" /></a>
-      <a href="profile.html" class="profile-nav-link"
+      <a href="#" onclick="checkProfileAccess(event)" class="profile-nav-link"
         style="text-decoration: none; color: #f0d9a0; font-family: 'Georgia', serif; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; padding: 9px 18px; border-radius: 50px; background: rgba(10, 5, 0, 0.3); border: 1px solid rgba(197, 151, 58, 0.3); backdrop-filter: blur(6px); display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;"><svg
           width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px; margin-bottom: 2px;">
@@ -83,37 +83,37 @@
         <!-- Right: Form -->
         <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
           <div class="form-row">
-            <div class="form-group">
+            <div class="form-group floating">
+              <input type="text" id="name" placeholder=" " required />
               <label for="name">Full Name</label>
-              <input type="text" id="name" placeholder="Your name" required />
             </div>
-            <div class="form-group">
+            <div class="form-group floating">
+              <input type="tel" id="phone" placeholder=" " />
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" />
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group floating">
+            <input type="email" id="email" placeholder=" " />
             <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="your@email.com" />
           </div>
-          <div class="form-group">
-            <label for="interest">Interested In</label>
-            <select id="interest">
-              <option value="">Select a category</option>
+          <div class="form-group floating">
+            <select id="interest" required>
+              <option value="" disabled selected hidden></option>
               <option>Kanchipuram Silk</option>
               <option>Paithani Silk</option>
               <option>Banarasi Silk</option>
               <option>Bridal Collection</option>
               <option value="Other">Other</option>
             </select>
+            <label for="interest">Interested In</label>
           </div>
-          <div class="form-group" id="other-interest-group" style="display: none;">
+          <div class="form-group floating" id="other-interest-group" style="display: none;">
+            <input type="text" id="other-interest" placeholder=" " />
             <label for="other-interest">Please Specify</label>
-            <input type="text" id="other-interest" placeholder="Specify your interest..." />
           </div>
-          <div class="form-group">
+          <div class="form-group floating">
+            <textarea id="message" placeholder=" " required></textarea>
             <label for="message">Your Message</label>
-            <textarea id="message" placeholder="Tell us what you're looking for…" required></textarea>
           </div>
           <div class="success-msg" id="success-msg">
             ✅ Thank you! We'll get back to you shortly.

@@ -52,12 +52,23 @@
       <p class="dash-subtitle">Review, Accept, or Reject customer orders universally.</p>
     </div>
 
+    <!-- Search -->
+    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: flex-end;">
+      <input type="text" id="admin-search-input" placeholder="Search by email or Order ID..." oninput="applyAdminSearch()" style="padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(197,151,58,0.4); background: rgba(10,5,0,0.5); color: #f0d9a0; width: 300px; outline: none; font-family: inherit;">
+    </div>
+
     <!-- Filters -->
     <div class="dash-filters">
       <button class="filter-btn active" onclick="filterOrders('all', event)">All Orders</button>
       <button class="filter-btn" onclick="filterOrders('Awaiting Confirmation', event)">Pending</button>
       <button class="filter-btn" onclick="filterOrders('Accepted', event)">Accepted</button>
+      <button class="filter-btn" onclick="filterOrders('Dispatched', event)">Dispatched</button>
+      <button class="filter-btn" onclick="filterOrders('Delivered', event)">Delivered</button>
       <button class="filter-btn" onclick="filterOrders('Rejected', event)">Rejected</button>
+      <!-- T: Export CSV -->
+      <button class="filter-btn" onclick="exportOrdersCSV()" style="margin-left:auto; background:rgba(100,200,100,0.12); border-color:rgba(100,200,100,0.3); color:#7ecb7e;">📥 Export CSV</button>
+      <!-- U: Customer List -->
+      <button class="filter-btn" onclick="showCustomerList()" style="background:rgba(100,150,255,0.12); border-color:rgba(100,150,255,0.3); color:#a0c0ff;">👥 Customers</button>
     </div>
     
     <div id="loading-orders" style="color: #f5d08a; padding: 20px;">Fetching global transactions...</div>
@@ -65,6 +76,9 @@
     <div class="orders-grid" id="admin-orders-grid">
       <!-- Generated orders -->
     </div>
+
+    <!-- U: Customer list panel (hidden by default) -->
+    <div id="customer-list-panel" style="display:none; margin-top:24px;"></div>
 
   </section>
 

@@ -14,7 +14,7 @@ body {
 .bg-image {
   position: fixed;
   inset: 0;
-  background: url('bg images/products-bg.jpg') center center / cover no-repeat;
+  background: url('https://varanchi.com/cdn/shop/files/all_sarees_banner_new_copy.jpg?v=1728969871&width=3200') center center / cover no-repeat;
   opacity: 0;
   animation: fadeIn 3s ease forwards;
   z-index: 0;
@@ -158,7 +158,7 @@ body {
 .menu-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   z-index: 99;
   display: none;
@@ -172,7 +172,7 @@ body {
   .navbar {
     padding: 10px 20px;
   }
-  
+
   .hamburger {
     display: block;
   }
@@ -190,7 +190,7 @@ body {
     gap: 20px;
     transition: right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 100;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
@@ -797,18 +797,23 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
   }
+
   .product-img-wrap {
     height: 160px;
   }
+
   .product-info {
     padding: 12px;
   }
+
   .product-info h3 {
     font-size: 0.9rem;
   }
+
   .product-footer .price {
     font-size: 0.95rem;
   }
+
   .add-btn {
     padding: 6px 12px;
     font-size: 0.7rem;
@@ -820,20 +825,225 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 8px;
   }
+
   .product-img-wrap {
     height: 140px;
   }
+
   .product-info {
     padding: 10px;
   }
+
   .product-info h3 {
     font-size: 0.82rem;
   }
+
   .product-footer .price {
     font-size: 0.88rem;
   }
+
   .add-btn {
     padding: 6px 10px;
     font-size: 0.65rem;
   }
 }
+
+/* ─────────────────────────────────────────────
+   M + F: Card action buttons (Share & Wishlist)
+───────────────────────────────────────────── */
+.card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0 2px 4px;
+}
+
+.card-action-btn {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 50px;
+  border: 1px solid rgba(197,151,58,0.25);
+  background: rgba(10,5,0,0.45);
+  color: #f0d9a0;
+  font-size: 0.7rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  font-family: 'Georgia', serif;
+}
+
+.card-action-btn:hover {
+  background: rgba(197,151,58,0.18);
+  border-color: rgba(197,151,58,0.55);
+  transform: translateY(-1px);
+}
+
+.wishlist-btn.active {
+  background: rgba(220,50,80,0.13);
+  border-color: rgba(220,50,80,0.4);
+  color: #ffb3c1;
+}
+
+/* ─────────────────────────────────────────────
+   S: Stock / Availability Badge
+───────────────────────────────────────────── */
+.stock-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.stock-badge.in-stock    { background: rgba(52,211,153,0.15); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
+.stock-badge.limited     { background: rgba(245,208,138,0.15); color: #fde68a; border: 1px solid rgba(245,208,138,0.3); }
+.stock-badge.sold-out    { background: rgba(255,107,107,0.15); color: #fca5a5; border: 1px solid rgba(255,107,107,0.3); }
+
+/* ─────────────────────────────────────────────
+   X: Price Range Filter Slider
+───────────────────────────────────────────── */
+.price-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  flex-wrap: wrap;
+}
+
+.price-filter-row label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  min-width: 120px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #c9973a 0%, #c9973a var(--val, 100%), rgba(255,255,255,0.15) var(--val, 100%));
+  outline: none;
+  cursor: pointer;
+}
+
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5d08a, #c9973a);
+  border: 2px solid #1a0a00;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(197,151,58,0.5);
+  transition: transform 0.15s ease;
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.price-value-tag {
+  font-size: 0.78rem;
+  color: #f5d08a;
+  font-weight: 700;
+  min-width: 70px;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────
+   Y: Recently Viewed Section
+───────────────────────────────────────────── */
+.recently-viewed-section {
+  margin: 40px 0 20px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(197,151,58,0.15);
+}
+
+.recently-viewed-section h3 {
+  font-size: 1rem;
+  color: #f5d08a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.rv-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(197,151,58,0.3) transparent;
+}
+
+.rv-card {
+  flex: 0 0 110px;
+  background: rgba(10,5,0,0.4);
+  border: 1px solid rgba(197,151,58,0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.rv-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(197,151,58,0.5);
+}
+
+.rv-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.rv-card-name {
+  font-size: 0.65rem;
+  color: #f0d9a0;
+  padding: 5px 8px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─────────────────────────────────────────────
+   AA: Sticky Add-to-Cart bar in product modal
+───────────────────────────────────────────── */
+.pd-sticky-footer {
+  position: sticky;
+  bottom: 0;
+  background: rgba(10,5,0,0.92);
+  border-top: 1px solid rgba(197,151,58,0.2);
+  padding: 12px 16px;
+  margin-top: auto;
+  backdrop-filter: blur(10px);
+}
+
+/* ─────────────────────────────────────────────
+   Z: Skeleton shimmer (mobile adjustments)
+───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .skeleton-img { height: 150px; }
+  .card-actions { gap: 4px; }
+  .card-action-btn { font-size: 0.62rem; padding: 6px 2px; }
+}
+
+/* ─────────────────────────────────────────────
+   W: Navbar search bar (product page specific)
+───────────────────────────────────────────── */
+.search-filter-bar {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}

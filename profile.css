@@ -713,6 +713,107 @@
   color: #ff6b6b;
 }
 
+/* ── P: Dispatched / Delivered status badges ── */
+.status-dispatched {
+  background: rgba(96, 165, 250, 0.18);
+  color: #93c5fd;
+}
+
+.status-delivered {
+  background: rgba(52, 211, 153, 0.18);
+  color: #6ee7b7;
+}
+
+/* ── E: Order timeline polish ── */
+.order-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0 8px;
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(197,151,58,0.1);
+  gap: 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.tl-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 56px;
+  position: relative;
+}
+
+.tl-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: calc(50% + 14px);
+  width: calc(100% - 28px);
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  z-index: 0;
+}
+
+.tl-step.done:not(:last-child)::after {
+  background: linear-gradient(90deg, #c9973a, rgba(197,151,58,0.3));
+}
+
+.tl-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.tl-step.done .tl-dot {
+  background: rgba(197,151,58,0.25);
+  border-color: #c9973a;
+  color: #f5d08a;
+}
+
+.tl-label {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tl-step.done .tl-label {
+  color: #f5d08a;
+}
+
+/* ── N: Edit name button ── */
+.edit-name-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-left: 6px;
+}
+.edit-name-btn:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+
 .order-items-list {
   list-style: none;
   padding-left: 0;

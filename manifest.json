@@ -1,0 +1,44 @@
+{
+  "name": "Lakshmanna Pure Silk Sarees",
+  "short_name": "Lakshmanna",
+  "description": "Shop authentic handloom pure silk sarees from Dharmavaram",
+  "start_url": "/home.html",
+  "display": "standalone",
+  "background_color": "#0a0500",
+  "theme_color": "#c9973a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "en-IN",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Shop Sarees",
+      "url": "/products.html",
+      "description": "Browse our full collection"
+    },
+    {
+      "name": "My Cart",
+      "url": "/cart.html",
+      "description": "View your shopping cart"
+    },
+    {
+      "name": "My Profile",
+      "url": "/profile.html",
+      "description": "Manage your account"
+    }
+  ]
+}
