@@ -18,8 +18,8 @@ const Razorpay = require('razorpay');
 
 // ── Razorpay Instance ──
 const razorpay = new Razorpay({
-  key_id:     process.env.RAZORPAY_KEY_ID || 'missing_key_id',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'missing_key_secret'
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 // ── Nodemailer Transporter (declared early so all routes can use it) ──
@@ -66,7 +66,7 @@ app.post('/api/forgot-password', async (req, res) => {
     if (!user) return res.status(404).json({ error: 'No account found with that email address.' });
 
     // Generate 6-digit code
-    const code   = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiry = Date.now() + 10 * 60 * 1000; // 10 minutes
     resetCodes.set(email, { code, expiry });
 
@@ -339,10 +339,10 @@ app.post('/api/create-payment', async (req, res) => {
     };
     const order = await razorpay.orders.create(options);
     res.status(200).json({
-      orderId:  order.id,
-      amount:   order.amount,
+      orderId: order.id,
+      amount: order.amount,
       currency: order.currency,
-      keyId:    process.env.RAZORPAY_KEY_ID
+      keyId: process.env.RAZORPAY_KEY_ID
     });
   } catch (err) {
     console.error('Razorpay order creation error:', err);
@@ -379,13 +379,13 @@ app.post('/api/verify-payment', async (req, res) => {
 
   // ── Signature valid → Save Order ──
   try {
-    order.id             = 'ORD-' + Date.now();
-    order.userEmail      = userEmail || 'Guest Customer';
-    order.status         = 'Awaiting Confirmation';
-    order.date           = new Date();
-    order.paymentId      = razorpay_payment_id;
+    order.id = 'ORD-' + Date.now();
+    order.userEmail = userEmail || 'Guest Customer';
+    order.status = 'Awaiting Confirmation';
+    order.date = new Date();
+    order.paymentId = razorpay_payment_id;
     order.razorpayOrderId = razorpay_order_id;
-    order.paymentStatus  = 'Paid';
+    order.paymentStatus = 'Paid';
 
     const newOrder = await Order.create(order);
 
@@ -452,7 +452,7 @@ app.post('/api/verify-payment', async (req, res) => {
       // Still confirm the order even if email fails
     }
 
-      // ── Send confirmation email to customer (if not a guest) ──
+    // ── Send confirmation email to customer (if not a guest) ──
     if (userEmail && userEmail !== 'Guest Customer') {
       try {
         await transporter.sendMail({
@@ -479,7 +479,7 @@ app.post('/api/verify-payment', async (req, res) => {
             </div>
           `
         });
-      } catch(custMailErr) {
+      } catch (custMailErr) {
         console.error('Customer confirmation email failed:', custMailErr.message);
       }
     }
@@ -507,17 +507,17 @@ app.post('/api/orders', async (req, res) => {
 
     const newOrder = await Order.create(order);
 
-  // ── Send order notification email to owner ──
-  try {
-    const itemsHTML = order.items.map(i =>
-      `<tr>
+    // ── Send order notification email to owner ──
+    try {
+      const itemsHTML = order.items.map(i =>
+        `<tr>
         <td style="padding:6px 10px;">${i.name}</td>
         <td style="padding:6px 10px; text-align:center;">${i.qty}</td>
         <td style="padding:6px 10px; text-align:right;">₹${(i.price * i.qty).toLocaleString('en-IN')}</td>
       </tr>`
-    ).join('');
+      ).join('');
 
-    const htmlBody = `
+      const htmlBody = `
       <div style="font-family: Georgia, serif; max-width: 620px; margin: auto; border: 1px solid #c9973a; border-radius: 10px; overflow: hidden;">
         <div style="background: #1a0a00; padding: 20px 30px; text-align: center;">
           <h2 style="color: #f5d08a; margin: 0;">🛒 New Order Received!</h2>
@@ -553,16 +553,16 @@ app.post('/api/orders', async (req, res) => {
       </div>
     `;
 
-    await transporter.sendMail({
-      from: `"Lakshmanna Sarees Website" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      subject: `🛒 New Order ${order.id} – ₹${order.total.toLocaleString('en-IN')} from ${userEmail}`,
-      html: htmlBody
-    });
-  } catch (mailErr) {
-    console.error('Order email failed:', mailErr.message);
-    // Still confirm the order even if email fails
-  }
+      await transporter.sendMail({
+        from: `"Lakshmanna Sarees Website" <${process.env.EMAIL_USER}>`,
+        to: process.env.EMAIL_USER,
+        subject: `🛒 New Order ${order.id} – ₹${order.total.toLocaleString('en-IN')} from ${userEmail}`,
+        html: htmlBody
+      });
+    } catch (mailErr) {
+      console.error('Order email failed:', mailErr.message);
+      // Still confirm the order even if email fails
+    }
 
     // ── Send confirmation email to customer (if not a guest) ──
     if (userEmail && userEmail !== 'Guest Customer') {
@@ -591,7 +591,7 @@ app.post('/api/orders', async (req, res) => {
             </div>
           `
         });
-      } catch(custMailErr) {
+      } catch (custMailErr) {
         console.error('Customer COD confirmation email failed:', custMailErr.message);
       }
     }
@@ -608,7 +608,7 @@ app.post('/api/orders', async (req, res) => {
 app.get('/api/my-orders', async (req, res) => {
   const email = req.query.email;
   if (!email) return res.status(400).json({ error: 'Email required.' });
-  
+
   try {
     const orders = await Order.find({ userEmail: email }).sort({ date: -1 });
     res.status(200).json(orders);
@@ -623,7 +623,7 @@ app.get('/api/all-orders', async (req, res) => {
   if (token !== process.env.ADMIN_SECRET) {
     return res.status(403).json({ error: 'Admin access required.' });
   }
-  
+
   try {
     const orders = await Order.find().sort({ date: -1 });
     res.status(200).json(orders);
@@ -638,7 +638,7 @@ app.post('/api/update-order-status', async (req, res) => {
   if (token !== process.env.ADMIN_SECRET) return res.status(403).json({ error: 'Admin access required.' });
   const allowed = ['Accepted', 'Rejected', 'Dispatched', 'Delivered'];
   if (!allowed.includes(status)) return res.status(400).json({ error: 'Invalid status.' });
-  
+
   try {
     const order = await Order.findOneAndUpdate(
       { id: orderId },
@@ -649,9 +649,9 @@ app.post('/api/update-order-status', async (req, res) => {
 
     // ── Notify customer of status change ──
     if (order.userEmail && order.userEmail !== 'Guest Customer') {
-      const emoji  = status === 'Accepted' ? '🎉' : status === 'Rejected' ? '❌' : '🔄';
+      const emoji = status === 'Accepted' ? '🎉' : status === 'Rejected' ? '❌' : '🔄';
       const colour = status === 'Accepted' ? '#2e7d32' : status === 'Rejected' ? '#c62828' : '#555';
-      const bgCol  = status === 'Accepted' ? '#e8f5e9' : status === 'Rejected' ? '#ffebee' : '#fff3e0';
+      const bgCol = status === 'Accepted' ? '#e8f5e9' : status === 'Rejected' ? '#ffebee' : '#fff3e0';
       try {
         await transporter.sendMail({
           from: `"Lakshmanna Pure Silk Sarees" <${process.env.EMAIL_USER}>`,
@@ -678,7 +678,7 @@ app.post('/api/update-order-status', async (req, res) => {
             </div>
           `
         });
-      } catch(notifyErr) {
+      } catch (notifyErr) {
         console.error('Status notification email failed:', notifyErr.message);
       }
     }
@@ -699,8 +699,8 @@ app.post('/api/contact', async (req, res) => {
   }
 
   const interestLine = interest ? `<tr><td><strong>Interested In:</strong></td><td>${interest}</td></tr>` : '';
-  const phoneLine    = phone    ? `<tr><td><strong>Phone:</strong></td><td>${phone}</td></tr>` : '';
-  const emailLine    = email    ? `<tr><td><strong>Email:</strong></td><td>${email}</td></tr>` : '';
+  const phoneLine = phone ? `<tr><td><strong>Phone:</strong></td><td>${phone}</td></tr>` : '';
+  const emailLine = email ? `<tr><td><strong>Email:</strong></td><td>${email}</td></tr>` : '';
 
   const htmlBody = `
     <div style="font-family: Georgia, serif; max-width: 600px; margin: auto; border: 1px solid #c9973a; border-radius: 10px; overflow: hidden;">
@@ -775,10 +775,10 @@ app.get('/api/all-users', async (req, res) => {
 // G: Validate coupon code
 
 const COUPONS = {
-  'SILK10':   { type: 'pct',  value: 10,  description: '10% off' },
-  'SILK20':   { type: 'pct',  value: 20,  description: '20% off' },
-  'NEWUSER':  { type: 'flat', value: 500, description: '₹500 off' },
-  'SPECIAL15':{ type: 'pct',  value: 15,  description: '15% off' },
+  'SILK10': { type: 'pct', value: 10, description: '10% off' },
+  'SILK20': { type: 'pct', value: 20, description: '20% off' },
+  'NEWUSER': { type: 'flat', value: 500, description: '₹500 off' },
+  'SPECIAL15': { type: 'pct', value: 15, description: '15% off' },
 };
 app.post('/api/validate-coupon', (req, res) => {
   const { code } = req.body;
@@ -819,7 +819,7 @@ app.post('/api/cancel-order', async (req, res) => {
     const order = await Order.findOne({ id: orderId, userEmail: email });
     if (!order) return res.status(404).json({ error: 'Order not found.' });
     if (order.status !== 'Awaiting Confirmation') return res.status(400).json({ error: 'Order cannot be cancelled at this stage.' });
-    
+
     order.status = 'Cancelled';
     await order.save();
     res.status(200).json({ message: 'Order cancelled successfully.' });
