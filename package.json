@@ -20,5 +20,8 @@
     "nodemailer": "^8.0.5",
     "puppeteer": "^24.42.0",
     "razorpay": "^2.9.6"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
