@@ -41,7 +41,7 @@ mongoose.connect(MONGODB_URI)
 app.use(cors());
 app.use(express.json());
 // Automatically serve all static HTML/CSS/JS/JPG files in the directory
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, { dotfiles: 'allow' }));
 
 // ── Request Logger ──
 app.use((req, res, next) => {

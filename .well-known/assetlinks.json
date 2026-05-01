@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.onrender.saree_website_i3nx.twa",
+    "sha256_cert_fingerprints": ["CB:80:DB:12:A0:E2:6D:31:48:FE:3D:4D:EF:DC:E9:76:B7:D3:8C:34:D1:B2:5C:AA:D0:47:F4:F4:D6:63:84:52"]
+  }
+}]
